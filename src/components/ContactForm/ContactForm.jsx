@@ -1,19 +1,16 @@
 import { useState } from 'react';
-import { nanoid } from 'nanoid';
 import { Button, Form, Input, Label } from './ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectContacts } from 'components/redux/selectors';
-import { addContact } from 'components/redux/contactsSlice';
+import { addContact } from 'components/services/Api';
 
-export const ContactForm = ({ onSubmit }) => {
+export const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
   const contacts = useSelector(selectContacts);
 
   const dispatch = useDispatch();
-
-  const nameInputId = nanoid();
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -27,17 +24,11 @@ export const ContactForm = ({ onSubmit }) => {
       return;
     }
 
-    dispatch(addContact({ name, number, nameInputId }));
+    dispatch(addContact({ name, number }));
 
     setName('');
     setNumber('');
   };
-  // const addContact = contact => {
-  //   setContacts(prevContacts => [
-  //     { id: nanoid(), ...contact },
-  //     ...prevContacts,
-  //   ]);
-  // };
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -48,14 +39,9 @@ export const ContactForm = ({ onSubmit }) => {
     }
   };
 
-  // const reset = () => {
-  //   setName('');
-  //   setNumber('');
-  // };
-
   return (
     <Form onSubmit={handleSubmit}>
-      <Label htmlFor={nameInputId}>Name</Label>
+      <Label>Name</Label>
       <Input
         type="text"
         name="name"
